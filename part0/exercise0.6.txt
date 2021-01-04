@@ -1,0 +1,14 @@
+title single page app - new note
+
+note over browser
+push a new note to current notes
+end note
+
+browser->server: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa
+
+note over server
+server creates a new note object
+end note
+
+server-->browser:status code 201 created
+
