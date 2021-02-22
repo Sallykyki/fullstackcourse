@@ -5,12 +5,12 @@ const Countries = ({ countries }) => {
     case countries.length < 1:
       return <div>No country found</div>;
     case countries.length === 1:
-      return <Country country={countries[0]} />;
+      return <Country country={countries[0]} initialDisplay={true} />;
     case countries.length < 10:
       return (
         <div>
           {countries.map((country) => (
-            <p key={country.alpha3Code}>{country.name}</p>
+            <Country key={country.alpha3Code} country={country} />
           ))}
         </div>
       );
