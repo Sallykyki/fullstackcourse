@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Filter from "./components/Filter";
 import PersonForm from "./components/PersonForm";
 import Persons from "./components/Persons";
-import personServices from "./services/persons";
+import { getPersons, addPerson, deletePerson } from "./services/persons";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
@@ -11,7 +11,7 @@ const App = () => {
   const [filterName, setFilter] = useState("");
 
   useEffect(() => {
-    personServices.getPersons().then((initialPersons) => {
+    getPersons().then((initialPersons) => {
       setPersons(initialPersons);
     });
   }, []);
@@ -36,11 +36,29 @@ const App = () => {
     if (persons.some((person) => person.name === newName)) {
       alert(`${newName} is already added to phonebook`);
     } else {
-      personServices.addPerson(personObject).then((returnedPerson) => {
-        setPersons(persons.concat(returnedPerson));
-        setNewName("");
-        setNewNumber("");
-      });
+      addPerson(personObject)
+        .then((returnedPerson) => {
+          setPersons(persons.concat(returnedPerson));
+          setNewName("");
+          setNewNumber("");
+        })
+        .catch((error) => error);
+    }
+  };
+
+  const handleDelete = (id) => {
+    const person = persons.find((p) => p.id === id);
+
+    const result = window.confirm(`Delete ${person.name}`);
+
+    if (result) {
+      deletePerson(person.id)
+        .then(() =>
+          getPersons().then((persons) => {
+            setPersons(persons);
+          })
+        )
+        .catch((error) => error);
     }
   };
 
@@ -66,7 +84,7 @@ const App = () => {
         handleNumberChange={handleNumberChange}
       />
       <h2>Numbers</h2>
-      <Persons personsToShow={personsToShow} />
+      <Persons personsToShow={personsToShow} handleDelete={handleDelete} />
     </div>
   );
 };
