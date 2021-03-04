@@ -22,4 +22,11 @@ const deletePerson = (id) => {
   });
 };
 
-export { getPersons, addPerson, deletePerson };
+const updateNumber = (id, person) => {
+  const request = axios.put(`${baseUrl}/${id}`, person);
+  return request.then((response) => {
+    return response.data;
+  });
+};
+
+export { getPersons, addPerson, deletePerson, updateNumber };
